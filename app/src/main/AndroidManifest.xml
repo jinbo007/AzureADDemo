@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -29,17 +31,31 @@
             android:name="com.microsoft.identity.client.BrowserTabActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="msauth"
-                    android:host="com.demo.azureaddemo"
-                    android:path="/1wIqXSqBj7w%2Bh11ZifsnqwgyKrY%3D" />
+                    android:host="co.coral.demo01"
+                    android:path="/IZMRPJK3pJ2X9ODfxAgmb9JUp30="
+                    android:scheme="msauth" />
             </intent-filter>
         </activity>
+
+        <!--        <activity-->
+        <!--            android:exported="true"-->
+        <!--            android:name="com.microsoft.identity.client.BrowserTabActivity">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.VIEW" />-->
+        <!--                <category android:name="android.intent.category.DEFAULT" />-->
+        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+        <!--                <data-->
+        <!--                    android:scheme="msauth"-->
+        <!--                    android:host="co.coral.demo01"-->
+        <!--                    android:path="/IZMRPJK3pJ2X9ODfxAgmb9JUp30%3D" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
     </application>
-
-
 
 
 </manifest>

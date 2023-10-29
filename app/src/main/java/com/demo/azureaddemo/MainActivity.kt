@@ -1,7 +1,8 @@
 package com.demo.azureaddemo
 
-import android.R
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,57 +14,60 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.demo.azureaddemo.ui.theme.AzureADDemoTheme
+import com.microsoft.identity.client.AuthenticationCallback
 import com.microsoft.identity.client.IAccount
 import com.microsoft.identity.client.IAuthenticationResult
 import com.microsoft.identity.client.IMultipleAccountPublicClientApplication
 import com.microsoft.identity.client.IPublicClientApplication.IMultipleAccountApplicationCreatedListener
 import com.microsoft.identity.client.PublicClientApplication
+import com.microsoft.identity.client.exception.MsalClientException
 import com.microsoft.identity.client.exception.MsalException
+import com.microsoft.identity.client.exception.MsalServiceException
 import java.io.File
+import kotlin.math.log
 
 
 class MainActivity : ComponentActivity() {
     var mMultipleAccountApp: IMultipleAccountPublicClientApplication? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            AzureADDemoTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+        setContentView(R.layout.main)
+        findViewById<Button>(R.id.btn_create_application).setOnClickListener {
+            createMultipleAccountApplication()
+        }
+
+        findViewById<Button>(R.id.btn_request_token).setOnClickListener {
+            requestToken()
         }
     }
 
-    private fun createMultipleAccountApplication(){
+    private fun createMultipleAccountApplication() {
         val scopes = arrayOf("User.Read")
         val mFirstAccount: IAccount? = null
         val config = File(
-            "/msal_config.json")
+            "/msal_config.json"
+        )
 
         PublicClientApplication.createMultipleAccountPublicClientApplication(
             applicationContext,
-            config,
+            R.raw.msal_config_coral,
             object : IMultipleAccountApplicationCreatedListener {
                 override fun onCreated(application: IMultipleAccountPublicClientApplication) {
                     mMultipleAccountApp = application
-                    val account: IAccount = application.getAccount(mFirstAccount?.getId()?:"")
-                    if (account != null) {
-                        val newScopes = arrayOf("Calendars.Read")
-                        val authority: String =
-                            application.configuration.defaultAuthority.authorityURL
-                                .toString()
-
-                        val result: IAuthenticationResult =
-                            application.acquireTokenSilent(newScopes, account, authority)
-                    }
+//                    val account: IAccount = application.getAccount(mFirstAccount?.getId()?:"")
+//                    if (account != null) {
+//                        val newScopes = arrayOf("Calendars.Read")
+//                        val authority: String =
+//                            application.configuration.defaultAuthority.authorityURL
+//                                .toString()
+//
+//                        val result: IAuthenticationResult =
+//                            application.acquireTokenSilent(newScopes, account, authority)
+//                    }
                 }
 
                 override fun onError(exception: MsalException) {
+                    Log.d("TAG", "onError: ${exception.message}")
                     //Log Exception Here
                 }
             })
@@ -72,8 +76,34 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    private fun requestToken() {
+        val scopes = arrayOf("User.Read")
+        mMultipleAccountApp?.acquireToken(this, scopes, object : AuthenticationCallback {
+            override fun onSuccess(authenticationResult: IAuthenticationResult?) {
+                val accessToken = authenticationResult?.accessToken;
+                // Record account used to acquire token
+                val mFirstAccount = authenticationResult?.account;
+                Log.d("TAG", "onSuccess: ${authenticationResult?.accessToken}")
+            }
 
-    private fun accessTokenSilence(){
+            override fun onError(exception: MsalException?) {
+                if (exception is MsalClientException) {
+                    //And exception from the client (MSAL)
+                } else if (exception is MsalServiceException) {
+                    //An exception from the server
+                }
+            }
+
+            override fun onCancel() {
+            }
+
+        });
+
+
+    }
+
+
+    private fun accessTokenSilence() {
 //        val account: IAccount = mMultipleAccountApp?.getAccount("mFirstAccount.getId()")
 //
 //        if (account != null) {
@@ -92,31 +122,7 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    @Composable
-    fun Greeting(name: String, modifier: Modifier = Modifier) {
-        Button(
-            onClick = {
-                // 在这里定义按钮的点击事件
-                // 例如，你可以导航到另一个屏幕
-                // navController.navigate("destination")
-                createMultipleAccountApplication()
-            },
-            modifier = Modifier.fillMaxSize()
-        ) {
-            // 按钮上的文本
-            Text(text = "点击事件")
-        }
-    }
 
-
-
-    @Preview(showBackground = true)
-    @Composable
-    fun GreetingPreview() {
-        AzureADDemoTheme {
-            Greeting("Android")
-        }
-    }
 }
 
 

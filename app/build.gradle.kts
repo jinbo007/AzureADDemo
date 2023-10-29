@@ -8,7 +8,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.demo.azureaddemo"
+        applicationId = "co.coral.demo01"
         minSdk = 25
         targetSdk = 33
         versionCode = 1

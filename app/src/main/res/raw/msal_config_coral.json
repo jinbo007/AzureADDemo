@@ -1,0 +1,14 @@
+{
+  "client_id" : "8179a6ac-05f0-424d-be06-8deecf66fe5a",
+  "authorization_user_agent" : "DEFAULT",
+  "redirect_uri" : "msauth://co.coral.demo01/IZMRPJK3pJ2X9ODfxAgmb9JUp30%3D",
+  "authorities" : [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADMyOrg",
+        "tenant_id": "83bba42e-2873-4c1b-bde9-624e02b65dae"
+      }
+    }
+  ]
+}
