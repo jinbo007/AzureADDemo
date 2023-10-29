@@ -7,12 +7,17 @@
     <Button
         android:id="@+id/btn_create_application"
         android:layout_width="wrap_content"
-        android:text="Create Application"
+        android:visibility="gone"
+        android:text="RequestToken Application"
         android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/btn_request_token"
         android:layout_width="wrap_content"
         android:text="requtestToken"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
 

@@ -3,6 +3,8 @@ package com.demo.azureaddemo
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,15 +31,18 @@ import kotlin.math.log
 
 class MainActivity : ComponentActivity() {
     var mMultipleAccountApp: IMultipleAccountPublicClientApplication? = null
+    lateinit var tvContent: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
         findViewById<Button>(R.id.btn_create_application).setOnClickListener {
             createMultipleAccountApplication()
         }
+        tvContent = findViewById(R.id.tv_content)
 
         findViewById<Button>(R.id.btn_request_token).setOnClickListener {
-            requestToken()
+            createMultipleAccountApplication()
+//            requestToken()
         }
     }
 
@@ -64,11 +69,13 @@ class MainActivity : ComponentActivity() {
 //                        val result: IAuthenticationResult =
 //                            application.acquireTokenSilent(newScopes, account, authority)
 //                    }
+                    requestToken()
                 }
 
                 override fun onError(exception: MsalException) {
                     Log.d("TAG", "onError: ${exception.message}")
                     //Log Exception Here
+                    exception.message.showToast()
                 }
             })
 
@@ -83,7 +90,8 @@ class MainActivity : ComponentActivity() {
                 val accessToken = authenticationResult?.accessToken;
                 // Record account used to acquire token
                 val mFirstAccount = authenticationResult?.account;
-                Log.d("TAG", "onSuccess: ${authenticationResult?.accessToken}")
+                ("success token: \n" + authenticationResult?.accessToken).showToast()
+
             }
 
             override fun onError(exception: MsalException?) {
@@ -92,9 +100,11 @@ class MainActivity : ComponentActivity() {
                 } else if (exception is MsalServiceException) {
                     //An exception from the server
                 }
+                exception?.message?.showToast()
             }
 
             override fun onCancel() {
+                "user cancle".showToast()
             }
 
         });
@@ -102,6 +112,13 @@ class MainActivity : ComponentActivity() {
 
     }
 
+
+    private fun String?.showToast() {
+        runOnUiThread {
+            Toast.makeText(this@MainActivity, this ?: "", Toast.LENGTH_LONG).show()
+            tvContent.text = this
+        }
+    }
 
     private fun accessTokenSilence() {
 //        val account: IAccount = mMultipleAccountApp?.getAccount("mFirstAccount.getId()")
