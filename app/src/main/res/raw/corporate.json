@@ -1,0 +1,14 @@
+{
+  "client_id" : "1114c402-4e99-445e-abf4-0801598a2eb4",
+  "authorization_user_agent" : "DEFAULT",
+  "redirect_uri" : "msauth://com.orbixtechs.corporate/IZMRPJK3pJ2X9ODfxAgmb9JUp30%3D",
+  "authorities" : [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADMyOrg",
+        "tenant_id": "3fe131cd-fac9-4f72-9996-2900f3936dde"
+      }
+    }
+  ]
+}

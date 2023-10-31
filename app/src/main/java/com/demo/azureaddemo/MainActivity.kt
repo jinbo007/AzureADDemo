@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
 
         PublicClientApplication.createMultipleAccountPublicClientApplication(
             applicationContext,
-            R.raw.msal_config_coral,
+            R.raw.corporate,
             object : IMultipleAccountApplicationCreatedListener {
                 override fun onCreated(application: IMultipleAccountPublicClientApplication) {
                     mMultipleAccountApp = application
